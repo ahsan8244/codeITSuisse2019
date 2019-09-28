@@ -117,7 +117,7 @@ router.get('/lottery', (req, res) => {
     nums[j] = temp;
   }
   const lottery = nums.slice(0, 10);
-  res.send({lottery});
+  res.send(lottery);
 });
 
 router.post('/composition', (req,res) => {
