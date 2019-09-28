@@ -9,6 +9,66 @@ router.get('/', (req, res) => {
   res.send('It works!');
 });
 
+router.post('/maximise_1a', (req, res) => {
+  let input = req.body;
+
+  let capital = input.startingCapital;
+  let stocks = input.stocks;
+  let solution = [];
+  const subsetSum = function(L, n, result, m){
+    // let pivot = [];
+    // for(let i = 0;i<result.length ;++i){
+    //   pivot.push(result[i][1]);
+    // }
+    if(m == 0 ){
+      solution.push(result);
+      return;
+    }
+    
+    if(n == 0){
+      return;
+    }
+
+    if(L[n-1][2] <= m){
+      subsetSum(L,n-1,[...result,L[n-1]],m-L[n-1][2]);
+    }
+
+    subsetSum(L,n-1,result,m);
+
+  }
+  subsetSum(stocks,stocks.length,[],capital);
+
+  const calculateProfit = function(arr){
+    let output = 0;
+    for(let i = 0; i<arr.length ; ++i){
+      output+=(arr[i][1]);
+    }
+    return output;
+  }
+  let ind = 0;
+  let maxProfit = calculateProfit(solution[0]);
+  for(let i = 1; i < solution.length ;++i){
+    let maxProfit2 = calculateProfit(solution[i]);
+    if(maxProfit2 > maxProfit){
+      maxProfit = maxProfit2;
+      ind = i;
+    }
+  }
+
+  // console.log(solution[ind]);
+  stocks = [];
+  for(let i = 0;i<solution[ind].length;++i){
+    stocks.push(solution[ind][i][0]);
+  }
+
+  output = {
+    profit : maxProfit,
+    portfolio : stocks
+  }
+
+  res.json(output);
+});
+
 router.post('/gun-control', (req, res) => {
   console.log(req.body);
   let input = req.body;
@@ -279,6 +339,7 @@ router.post('/wedding-nightmare', (req, res) => {
 });
 
 router.get('/lottery', (req, res) => {
+  console.log(req);
   let nums = [ 1,
     2,
     3,
@@ -506,16 +567,20 @@ router.post('/readyplayerone', (req, res) => {
 });
 
 router.post('/sentiment-analysis', (req, res) => {
+  console.log(req.body.reviews);
   var sentiment = new Sentiment();
   const data = req.body.reviews;
   const output = []
-  data.forEach((item) => {
-    let fixed = item.replace("<br /><br />", " ");
+  for(i = 0; i < data.length; i++) {
+    let fixed = data[i];
+    fixed = fixed.replace("<br /><br />", " ");
     fixed = fixed.replace("\\\"", "");
+    fixed = fixed.replace(/^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/g, "");
+    console.log(fixed);
     // const fixed = fixed.replace() TODO : remove slash using regex
     let result = sentiment.analyze(fixed);
     output.push(result.score >= 0 ? 'positive' : 'negative');
-  });
+  }
   res.json({ response: output });
 });
 
