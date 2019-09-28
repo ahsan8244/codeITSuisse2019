@@ -153,7 +153,9 @@ router.post('/composition', (req,res) => {
 })
 
 router.post('/chessgame', (req, res) => {
-  console.log(req);
+  const board = req.body;
+  const result = chessboard(board);
+  res.send({result});
 });
 
 router.post('/readyplayerone', (req, res) => {
