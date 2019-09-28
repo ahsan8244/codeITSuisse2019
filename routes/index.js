@@ -36,9 +36,8 @@ router.post('/exponent', (req, res) => {
       let nString = input.n.toString();
       let lastDigit = nString[nString.length - 1];
       let arr = lastNumber[lastDigit];
-      let ind = input.p % arr.length;
-      ind === 0 ? ind = 1 : ind = ind;
-      lastDigit = arr[ind-1];
+      let ind = (input.p - 1)  % arr.length;
+      lastDigit = arr[ind];
       
       //let's find first digit
       let temp = input.p*Math.log10(input.n);
