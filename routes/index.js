@@ -15,12 +15,14 @@ router.post('/maximise_1b', (req, res) => {
   let capital = input.startingCapital;
   let stocks = input.stocks;
   let maxStock = stocks[0][1]/stocks[0][2];
-  let stock = {name : stocks[0][0], value : stocks[0][1], cost : stocks[0][2]};
+  let stock = stocks[0][0];
 
   capital -= stocks[0][2];
+  let profit = stocks[0][1];
   let portfolio = [stock];
   for(let i = 1;i<stocks.length ;++i){
       portfolio.push(stocks[i][0]);
+      profit += stocks[i][1];
       let pivotStock = stocks[i][1]/stocks[i][2];
       capital -= stocks[i][2];
       if(pivotStock > maxStock){
@@ -29,7 +31,7 @@ router.post('/maximise_1b', (req, res) => {
       }
   }
   console.log(capital);
-  let profit = Math.floor(capital/stock.cost) * stock.value;
+  profit += Math.floor(capital/stock.cost) * stock.value;
 
   for(let i = 0 ; i < Math.floor(capital/stock.cost); ++i){
       portfolio.push(stock.name);
@@ -47,7 +49,7 @@ router.post('/maximise_1c', (req, res) => {
   let capital = input.startingCapital;
   let stocks = input.stocks;
   let maxStock = stocks[0][1]/stocks[0][2];
-  let stock = {name : stocks[0][0], value : stocks[0][1], cost : stocks[0][2]};
+  let stock = stocks[0][0];
 
   for(let i = 1;i<stocks.length ;++i){
       let pivotStock = stocks[i][1]/stocks[i][2];
