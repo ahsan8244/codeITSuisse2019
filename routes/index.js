@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/gun-control', (req, res) => {
+  console.log(req.body);
   let input = req.body;
   let maze = input.grid; //global varible of maze
   // maze = maze.map(item => item.split(''));
@@ -58,6 +59,9 @@ router.post('/gun-control', (req, res) => {
   // L is an array of objects
   let solution = []
   const subsetSum = function(L, n, result, m){
+    if(solution.length > 0){
+      return;
+    }
     if(m == 0){
       solution.push(result);
       return;
