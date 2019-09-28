@@ -70,8 +70,7 @@ router.post('/maximise_1b', (req, res) => {
   }
 
   let stocksSorted = quickSort(stocks,0,stocks.length - 1);
-  let stocksSortedCost = stocksSorted;
-  stocksSortedCost = stocksSortedCost.map(item => item[2]);
+  let stocksSortedCost = stocksSorted.map(item => item[2]);
   let minCost = Math.min(...stocksSortedCost);
   let profit = 0;
   let portfolio = [];
@@ -83,23 +82,23 @@ router.post('/maximise_1b', (req, res) => {
 
 
 
-  function maxSum(stocksSorted,capital,n){
+  function maxSum(capital,n){
       if(capital < minCost || n < 0){
           return;
-      }else if(capital >= stocksSortedCost[n]){
-          let numOfStocks = Math.floor(capital/stocksSortedCost[n]);
+      }else if(capital >= stocksSorted[n][2]){
+          let numOfStocks = Math.floor(capital/stocksSorted[n][2]);
           profit += (numOfStocks*stocksSorted[n][1]);
           let stock = stocksSorted[n][0]
           for(let i = 0;i<numOfStocks; ++i){
               portfolio.push(stock);
           }
-          maxSum(stocksSorted,capital-(numOfStocks*stocksSortedCost[n]),n-1);
+          maxSum(capital-(numOfStocks*stocksSorted[n][2]),n-1);
       }else{
-          maxSum(stocksSorted,capital,n-1);
+          maxSum(capital,n-1);
       }
   }
 
-  maxSum(stocksSorted,capital,stocksSorted.length - 1);
+  maxSum(capital,stocksSorted.length - 1);
   let output = {
       profit,
       portfolio
@@ -169,28 +168,27 @@ router.post('/maximise_1c', (req, res) => {
   }
 
   let stocksSorted = quickSort(stocks,0,stocks.length - 1);
-  let stocksSortedCost = stocksSorted;
-  stocksSortedCost = stocksSortedCost.map(item => item[2]);
+  let stocksSortedCost = stocksSorted.map(item => item[2]);
   let minCost = Math.min(...stocksSortedCost);
   let profit = 0;
   let portfolio = [];
-  function maxSum(stocksSorted,capital,n){
+  function maxSum(capital,n){
       if(capital < minCost || n < 0){
           return;
-      }else if(capital >= stocksSortedCost[n]){
-          let numOfStocks = Math.floor(capital/stocksSortedCost[n]);
+      }else if(capital >= stocksSorted[n][2]){
+          let numOfStocks = Math.floor(capital/stocksSorted[n][2]);
           profit += (numOfStocks*stocksSorted[n][1]);
-          let stock = stocksSorted[n][0]
+          let stock = stocksSorted[n][0];
           for(let i = 0;i<numOfStocks; ++i){
               portfolio.push(stock);
           }
-          maxSum(stocksSorted,capital-(numOfStocks*stocksSortedCost[n]),n-1);
+          maxSum(capital-(numOfStocks*stocksSorted[n][2]),n-1);
       }else{
-          maxSum(stocksSorted,capital,n-1);
+          maxSum(capital,n-1);
       }
   }
 
-  maxSum(stocksSorted,capital,stocksSorted.length - 1);
+  maxSum(capital,stocksSorted.length - 1);
   let output = {
       profit,
       portfolio
