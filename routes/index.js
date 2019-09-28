@@ -130,6 +130,7 @@ router.post('/exponent', (req, res) => {
 })
 
 router.post('/wedding-nightmare', (req, res) => {
+  console.log(req.body);
   let input = req.body;
   results=[]
   function checkEnemies(arr1, arr2){
