@@ -84,7 +84,7 @@ function quickSort(items, left, right) {
 let stocksSorted = quickSort(stocks,0,stocks.length - 1);
 let stocksSortedCost = stocksSorted;
 stocksSortedCost = stocksSortedCost.map(item => item[2]);
-let minCost = Math.min([...stocksSortedCost]);
+let minCost = Math.min(...stocksSortedCost);
 let profit = 0;
 let portfolio = [];
 function maxSum(stocksSorted,capital,n){
