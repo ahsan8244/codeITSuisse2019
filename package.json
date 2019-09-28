@@ -2,10 +2,11 @@
   "name": "mbp",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "nodemon ./start.js"
+    "watch": "nodemon ./start.js",
+    "start": "node ./start.js"
   },
   "keywords": [],
   "author": "",
