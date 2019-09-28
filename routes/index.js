@@ -1,3 +1,5 @@
+var Sentiment = require('sentiment');
+
 const express = require('express');
 
 const router = express.Router();
@@ -30,6 +32,19 @@ router.post('/readyplayerone', (req, res) => {
   while (jar1.length !== 0) {
 
   }
+});
+
+router.post('/sentiment-analysis', (req, res) => {
+  var sentiment = new Sentiment();
+  const data = req.body.reviews;
+  const output = []
+  data.forEach((item) => {
+    const fixed = item.replace("<br /><br />", " ");
+    // const fixed = fixed.replace() TODO : remove slash using regex
+    let result = sentiment.analyze(fixed);
+    output.push(result.score >= 0 ? 'positive' : 'negative');
+  });
+  res.json({ response: output });
 });
 
 const chessboard = (chessboard) => {
