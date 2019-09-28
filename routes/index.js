@@ -11,35 +11,100 @@ router.get('/', (req, res) => {
 
 router.post('/maximise_1b', (req, res) => {
   let input = req.body;
-  console.log(input);
   let capital = input.startingCapital;
   let stocks = input.stocks;
-  let maxStock = stocks[0][1]/stocks[0][2];
-  let stock = stocks[0][0];
 
-  capital -= stocks[0][2];
-  let profit = stocks[0][1];
-  let portfolio = [stock];
-  for(let i = 1;i<stocks.length ;++i){
-      portfolio.push(stocks[i][0]);
-      profit += stocks[i][1];
-      let pivotStock = stocks[i][1]/stocks[i][2];
-      capital -= stocks[i][2];
-      if(pivotStock > maxStock){
-          axStock = pivotStock;
-          stock = {name : stocks[i][0], value : stocks[i][1], cost : stocks[i][2]};
+  function swap(items, firstIndex, secondIndex){
+      var temp = items[firstIndex];
+      items[firstIndex] = items[secondIndex];
+      items[secondIndex] = temp;
+  }
+
+  function partition(items, left, right) {
+
+      let pivot   = items[Math.floor((right + left) / 2)];
+      pivot = pivot[1]/pivot[2];
+      let i       = left;
+      let j       = right;
+
+
+      while (i <= j) {
+
+          while (items[i][1]/items[i][2] < pivot) {
+              i++;
+          }
+
+          while (items[j][1]/items[j][2] > pivot) {
+              j--;
+          }
+
+          if (i <= j) {
+              swap(items, i, j);
+              i++;
+              j--;
+          }
+      }
+
+      return i;
+  }
+
+  function quickSort(items, left, right) {
+
+      let index;
+
+      if (items.length > 1) {
+
+          index = partition(items, left, right);
+
+          if (left < index - 1) {
+              quickSort(items, left, index - 1);
+          }
+
+          if (index < right) {
+              quickSort(items, index, right);
+          }
+
+      }
+
+      return items;
+  }
+
+  let stocksSorted = quickSort(stocks,0,stocks.length - 1);
+  let stocksSortedCost = stocksSorted;
+  stocksSortedCost = stocksSortedCost.map(item => item[2]);
+  let minCost = Math.min(...stocksSortedCost);
+  let profit = 0;
+  let portfolio = [];
+  for(let i = 0 ; i<stocksSortedCost.length ; ++i){
+      portfolio.push(stocksSorted[i][0]);
+      profit += stocksSorted[i][1];
+      capital -= stocksSorted[i][2];
+  }
+
+
+
+  function maxSum(stocksSorted,capital,n){
+      if(capital < minCost || n < 0){
+          return;
+      }else if(capital >= stocksSortedCost[n]){
+          let numOfStocks = Math.floor(capital/stocksSortedCost[n]);
+          profit += (numOfStocks*stocksSorted[n][1]);
+          let stock = stocksSorted[n][0]
+          for(let i = 0;i<numOfStocks; ++i){
+              portfolio.push(stock);
+          }
+          maxSum(stocksSorted,capital-(numOfStocks*stocksSortedCost[n]),n-1);
+      }else{
+          maxSum(stocksSorted,capital,n-1);
       }
   }
-  console.log(capital);
-  profit += Math.floor(capital/stock.cost) * stock.value;
 
-  for(let i = 0 ; i < Math.floor(capital/stock.cost); ++i){
-      portfolio.push(stock.name);
-  }
+  maxSum(stocksSorted,capital,stocksSorted.length - 1);
   let output = {
-      profit ,
-      portfolio 
+      profit,
+      portfolio
   }
+  console.log(output);
   res.json(output);
 });
 
@@ -106,7 +171,7 @@ router.post('/maximise_1c', (req, res) => {
   let stocksSorted = quickSort(stocks,0,stocks.length - 1);
   let stocksSortedCost = stocksSorted;
   stocksSortedCost = stocksSortedCost.map(item => item[2]);
-  let minCost = Math.min([...stocksSortedCost]);
+  let minCost = Math.min(...stocksSortedCost);
   let profit = 0;
   let portfolio = [];
   function maxSum(stocksSorted,capital,n){
