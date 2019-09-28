@@ -400,7 +400,7 @@ router.post('/wedding-nightmare', (req, res) => {
 });
 
 router.get('/lottery', (req, res) => {
-  console.log(req);
+  console.log(req.headers);
   let nums = [ 1,
     2,
     3,
