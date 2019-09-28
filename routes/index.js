@@ -303,7 +303,7 @@ router.post('/composition', (req,res) => {
 router.post('/chessgame', (req, res) => {
   const board = req.body;
   const result = chessboard(board);
-  res.send(result);
+  res.send(result.toString());
 });
 
 router.post('/readyplayerone', (req, res) => {
