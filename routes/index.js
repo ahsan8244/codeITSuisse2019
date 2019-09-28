@@ -3,7 +3,7 @@ var Sentiment = require('sentiment');
 const express = require('express');
 
 const router = express.Router();
-router.use(express.json());
+router.use(express.json({limit: '50mb'}));
 
 router.get('/', (req, res) => {
   res.send('It works!');
