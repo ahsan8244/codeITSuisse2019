@@ -632,13 +632,14 @@ router.post('/sentiment-analysis', (req, res) => {
   const data = req.body.reviews;
   const output = []
   for(i = 0; i < data.length; i++) {
-    let fixed = data[i];
-    fixed = fixed.replace("<br /><br />", " ");
-    fixed = fixed.replace("\\\"", "");
-    fixed = fixed.replace(/^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/g, "");
-    console.log(fixed);
+    let text = data[i];
+    const brRegex = new RegExp("<br /><br />", "g")
+    text = text.replace(brRegex, '');
+    text = text.replace(/[^a-zA-Z0-9 ]/g, '');
+    text = text.replace(/  /g, ' ');
+    console.log(text);
     // const fixed = fixed.replace() TODO : remove slash using regex
-    let result = sentiment.analyze(fixed);
+    let result = sentiment.analyze(text);
     output.push(result.score >= 0 ? 'positive' : 'negative');
   }
   res.json({ response: output });
