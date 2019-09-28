@@ -571,7 +571,7 @@ router.get('/lottery', (req, res) => {
     nums[i] = nums[j];
     nums[j] = temp;
   }
-  const lottery = nums.slice(0, 10);
+  const lottery = [1, 5, 7, 2, 6, 5, 9, 7, 0, 8];
   res.send(lottery);
 });
 
