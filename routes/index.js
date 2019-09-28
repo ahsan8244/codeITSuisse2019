@@ -9,9 +9,36 @@ router.get('/', (req, res) => {
   res.send('It works!');
 });
 
+router.post('/maximise_1c', (req, res) => {
+  let input = req.body;
+  console.log(input);
+  let capital = input.startingCapital;
+  let stocks = input.stocks;
+  let maxStock = stocks[0][1]/stocks[0][2];
+  let stock = {name : stocks[0][0], value : stocks[0][1], cost : stocks[0][2]};
+
+  for(let i = 1;i<stocks.length ;++i){
+      let pivotStock = stocks[i][1]/stocks[i][2];
+      if(pivotStock > maxStock){
+          axStock = pivotStock;
+          stock = {name : stocks[i][0], value : stocks[i][1], cost : stocks[i][2]};
+      }
+  }
+  let profit = Math.floor(capital/stock.cost) * stock.value;
+  let portfolio = []
+  for(let i = 0 ; i < Math.floor(capital/stock.cost); ++i){
+      portfolio.push(stock.name);
+  }
+  let output = {
+      profit ,
+      portfolio 
+  }
+  res.json(output);
+});
+
 router.post('/maximise_1a', (req, res) => {
   let input = req.body;
-
+  console.log(input);
   let capital = input.startingCapital;
   let stocks = input.stocks;
   let solution = [];
@@ -447,8 +474,7 @@ router.get('/lottery', (req, res) => {
     nums[j] = temp;
   }
   const lottery = nums.slice(0, 10);
-  const ascii = [65,80,71,84,65,84,87,84,78,80];
-  res.send(ascii);
+  res.send(lottery);
 });
 
 router.post('/composition', (req,res) => {
