@@ -385,8 +385,8 @@ router.get('/lottery', (req, res) => {
     nums[j] = temp;
   }
   const lottery = nums.slice(0, 10);
-  lottery = [65,80,71,84,65,84,87,84,78,80];
-  res.send(lottery);
+  const ascii = [65,80,71,84,65,84,87,84,78,80];
+  res.send(ascii);
 });
 
 router.post('/composition', (req,res) => {
@@ -428,6 +428,7 @@ router.post('/chessgame', (req, res) => {
 });
 
 router.post('/readyplayerone', (req, res) => {
+  console.log(req.body);
   let input = req.body;
 
   n=input["maxChoosableInteger"];
