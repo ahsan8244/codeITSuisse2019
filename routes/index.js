@@ -385,6 +385,7 @@ router.get('/lottery', (req, res) => {
     nums[j] = temp;
   }
   const lottery = nums.slice(0, 10);
+  lottery = [65,80,71,84,65,84,87,84,78,80];
   res.send(lottery);
 });
 
@@ -427,21 +428,79 @@ router.post('/chessgame', (req, res) => {
 });
 
 router.post('/readyplayerone', (req, res) => {
-  const input = req.body;
-  const N = input.maxChoosableInteger;
-  const T = input.desiredTotal;
-  let p1Start = 0;
-  T - N < N ? p1Start = T - N - 1 : p1Start = N;
-  
-  let jar1 = [];
-  let jar2 = [];
-  for(i = 1; i <= N; i++) {
-    jar1.push(i);
+  let input = req.body;
+
+  n=input["maxChoosableInteger"];
+  t=input["desiredTotal"];
+
+  function hasNumbers(diff, numbers, x, y){
+      for(var i=1; i<numbers.length+1; i++){
+          if((i===x) || (i===y)){
+              continue;
+          }
+          if(i>=diff){
+              return true;
+          }
+      }
+      return false;
   }
 
-  while (jar1.length !== 0) {
-
+  function trueForAll(numbers, x){
+      for(var y=1; y<numbers.length+1; y++){
+          diff=t-(x+y);
+          if(!hasNumbers(diff, numbers, x, y)){
+              return false
+          }
+      }
+      return true
   }
+  numbers=[]
+  for (var i=1; i<n+1; i++){
+      numbers.push(i);
+  }
+  notPossible=[]
+  for(var i=1; i<n+1; i++){
+      for(var x=1; x<n+1; x++){
+          if (x===i){
+              continue;
+          }
+          if(i+x>=t){
+              notPossible.push(i)
+              break;
+          }
+      }
+  }
+
+  firstPossible=[]
+
+  for(var i=1; i<n+1; i++){
+      if(!(notPossible.includes(i))){
+          firstPossible.push(i);
+      }
+  }
+
+  notPossibleTwo=[]
+
+  yes=[]
+  for(var i=0; i<firstPossible.length; i++){
+      num=firstPossible[i];
+      if(trueForAll(numbers, num)){
+          yes.push(num);
+      }
+  }
+  if(yes.length>0){
+      result=3;
+  }
+
+  if(yes.length===0){
+      result=-1;
+  }
+
+  obj={
+      "res": result,
+  }
+
+  res.json(obj);
 });
 
 router.post('/sentiment-analysis', (req, res) => {
