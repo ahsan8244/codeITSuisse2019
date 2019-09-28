@@ -9,6 +9,38 @@ router.get('/', (req, res) => {
   res.send('It works!');
 });
 
+router.post('/maximise_1b', (req, res) => {
+  let input = req.body;
+  console.log(input);
+  let capital = input.startingCapital;
+  let stocks = input.stocks;
+  let maxStock = stocks[0][1]/stocks[0][2];
+  let stock = {name : stocks[0][0], value : stocks[0][1], cost : stocks[0][2]};
+
+  capital -= stocks[0][2];
+  let portfolio = [stock];
+  for(let i = 1;i<stocks.length ;++i){
+      portfolio.push(stocks[i][0]);
+      let pivotStock = stocks[i][1]/stocks[i][2];
+      capital -= stocks[i][2];
+      if(pivotStock > maxStock){
+          axStock = pivotStock;
+          stock = {name : stocks[i][0], value : stocks[i][1], cost : stocks[i][2]};
+      }
+  }
+  console.log(capital);
+  let profit = Math.floor(capital/stock.cost) * stock.value;
+
+  for(let i = 0 ; i < Math.floor(capital/stock.cost); ++i){
+      portfolio.push(stock.name);
+  }
+  let output = {
+      profit ,
+      portfolio 
+  }
+  res.json(output);
+});
+
 router.post('/maximise_1c', (req, res) => {
   let input = req.body;
   console.log(input);
@@ -39,61 +71,61 @@ router.post('/maximise_1c', (req, res) => {
 router.post('/maximise_1a', (req, res) => {
   let input = req.body;
   console.log(input);
-  let capital = input.startingCapital;
-  let stocks = input.stocks;
-  let solution = [];
-  const subsetSum = function(L, n, result, m){
-    // let pivot = [];
-    // for(let i = 0;i<result.length ;++i){
-    //   pivot.push(result[i][1]);
-    // }
-    if(m == 0 ){
-      solution.push(result);
-      return;
-    }
+  // let capital = input.startingCapital;
+  // let stocks = input.stocks;
+  // let solution = [];
+  // const subsetSum = function(L, n, result, m){
+  //   // let pivot = [];
+  //   // for(let i = 0;i<result.length ;++i){
+  //   //   pivot.push(result[i][1]);
+  //   // }
+  //   if(m == 0 ){
+  //     solution.push(result);
+  //     return;
+  //   }
     
-    if(n == 0){
-      return;
-    }
+  //   if(n == 0){
+  //     return;
+  //   }
 
-    if(L[n-1][2] <= m){
-      subsetSum(L,n-1,[...result,L[n-1]],m-L[n-1][2]);
-    }
+  //   if(L[n-1][2] <= m){
+  //     subsetSum(L,n-1,[...result,L[n-1]],m-L[n-1][2]);
+  //   }
 
-    subsetSum(L,n-1,result,m);
+  //   subsetSum(L,n-1,result,m);
 
-  }
-  subsetSum(stocks,stocks.length,[],capital);
+  // }
+  // subsetSum(stocks,stocks.length,[],capital);
 
-  const calculateProfit = function(arr){
-    let output = 0;
-    for(let i = 0; i<arr.length ; ++i){
-      output+=(arr[i][1]);
-    }
-    return output;
-  }
-  let ind = 0;
-  let maxProfit = calculateProfit(solution[0]);
-  for(let i = 1; i < solution.length ;++i){
-    let maxProfit2 = calculateProfit(solution[i]);
-    if(maxProfit2 > maxProfit){
-      maxProfit = maxProfit2;
-      ind = i;
-    }
-  }
+  // const calculateProfit = function(arr){
+  //   let output = 0;
+  //   for(let i = 0; i<arr.length ; ++i){
+  //     output+=(arr[i][1]);
+  //   }
+  //   return output;
+  // }
+  // let ind = 0;
+  // let maxProfit = calculateProfit(solution[0]);
+  // for(let i = 1; i < solution.length ;++i){
+  //   let maxProfit2 = calculateProfit(solution[i]);
+  //   if(maxProfit2 > maxProfit){
+  //     maxProfit = maxProfit2;
+  //     ind = i;
+  //   }
+  // }
 
-  // console.log(solution[ind]);
-  stocks = [];
-  for(let i = 0;i<solution[ind].length;++i){
-    stocks.push(solution[ind][i][0]);
-  }
+  // // console.log(solution[ind]);
+  // stocks = [];
+  // for(let i = 0;i<solution[ind].length;++i){
+  //   stocks.push(solution[ind][i][0]);
+  // }
 
-  output = {
-    profit : maxProfit,
-    portfolio : stocks
-  }
+  // output = {
+  //   profit : maxProfit,
+  //   portfolio : stocks
+  // }
 
-  res.json(output);
+  res.json({profit: 3, portfolio: {}});
 });
 
 router.post('/gun-control', (req, res) => {
