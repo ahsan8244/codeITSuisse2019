@@ -10,7 +10,9 @@ router.get('/', (req, res) => {
 });
 
 router.post('/exponent', (req, res) => {
+  console.log(req.body);
   let input = req.body;
+  console.log(input);
 
   let lastNumber = {
       '0' : [0],
@@ -35,7 +37,6 @@ router.post('/exponent', (req, res) => {
       let lastDigit = nString[nString.length - 1];
       let arr = lastNumber[lastDigit];
       let ind = input.p % arr.length;
-      console.log(ind);
       ind === 0 ? ind = 1 : ind = ind;
       lastDigit = arr[ind-1];
       
