@@ -5,30 +5,40 @@ const express = require('express');
 const router = express.Router();
 router.use(express.json());
 
-let output = [];
-
 router.get('/', (req, res) => {
   res.send('It works!');
 });
 
 router.post('/composition', (req,res) => {
+  let output = [];
   const input = req.body;
   const testId = input.setId;
   const composition = input.composition;
   const patterns = input.patterns;
-  // compositionFinder(composition,patterns,0);
-  // output.sort();
-  // while(output[0] == 0){
-  //   output.shift();
-  // }
-  // const result = Math.min(...output);
-  res.json(
-    {
-      testId,
-      result : 0
+  let patternFound = false;
+  for(let i = 0; i<patterns.length ;++i){
+    if(composition.indexOf(patterns[i]) != -1){
+      patternFound = true;
     }
-  );
-
+  }
+  if(patternFound){
+    output = compositionSolution(composition, patterns);
+    output.sort();
+    while(output[0] == 0){
+      output.shift();
+    }
+    res.json({
+      testId,
+      result : Math.min(...output)
+    })
+  }else{
+    res.json(
+      {
+        testId,
+        result : 0
+      }
+    );
+  }  
 })
 
 router.post('/chessgame', (req, res) => {
@@ -192,25 +202,30 @@ const chessboard = (chessboard) => {
   return output
 }
 
-function compositionFinder(composition,patterns,count) {
-  if(patterns.length <= 0 || composition.length <= 0) {
-      output.push(count);
-      return;
-  }else{
-      for(let i = 0;i<patterns.length;++i){
-        const first = patterns[i][0];
-        const second = patterns[i][1];
-        if(composition.indexOf(first+second) != -1){ 
-            const regexp = new RegExp(first+second, "g");
-            const removals = (composition.match(regexp) || []).length;
-            compositionFinder(composition.replace(first, ""),[...patterns.slice(0,i),...patterns.slice(i+1)], count + removals);
-            compositionFinder(composition.replace(second, ""),[...patterns.slice(0,i),...patterns.slice(i+1)],count + removals);
-        }else{
-            compositionFinder(composition,patterns.slice(1,),count)
-            continue;
+function compositionSolution(composition, pattern) {
+  let output = [];
+  function compositionFinder(composition,patterns,count) {
+    if(patterns.length <= 0 || composition.length <= 0) {
+        output.push(count);
+        return;
+    }else{
+        for(let i = 0;i<patterns.length;++i){
+          const first = patterns[i][0];
+          const second = patterns[i][1];
+          if(composition.indexOf(first+second) != -1){ 
+              const regexp = new RegExp(first+second, "g");
+              const removals = (composition.match(regexp) || []).length;
+              compositionFinder(composition.replace(first, ""),[...patterns.slice(0,i),...patterns.slice(i+1)], count + removals);
+              compositionFinder(composition.replace(second, ""),[...patterns.slice(0,i),...patterns.slice(i+1)],count + removals);
+          }else{
+              compositionFinder(composition,patterns.slice(1,),count)
+              continue;
+          }
         }
-      }
+    }
   }
+  compositionFinder(composition, pattern, 0);
+  return output;
 }
 
 
