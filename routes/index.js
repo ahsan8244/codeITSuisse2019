@@ -5,9 +5,27 @@ const express = require('express');
 const router = express.Router();
 router.use(express.json());
 
+let output = [];
+
 router.get('/', (req, res) => {
   res.send('It works!');
 });
+
+router.post('/composition', (req,res) => {
+  const input = req.body;
+  const testId = input.setId;
+  const composition = input.composition;
+  const patterns = input.patterns;
+  compositionFinder(composition,patterns,0);
+  const result = Math.min(...output);
+  res.json(
+    {
+      testId,
+      result
+    }
+  );
+
+})
 
 router.post('/chessgame', (req, res) => {
   const input = req.body;
@@ -39,7 +57,8 @@ router.post('/sentiment-analysis', (req, res) => {
   const data = req.body.reviews;
   const output = []
   data.forEach((item) => {
-    const fixed = item.replace("<br /><br />", " ");
+    let fixed = item.replace("<br /><br />", " ");
+    fixed = fixed.replace("\\\"", "");
     // const fixed = fixed.replace() TODO : remove slash using regex
     let result = sentiment.analyze(fixed);
     output.push(result.score >= 0 ? 'positive' : 'negative');
@@ -167,6 +186,27 @@ const chessboard = (chessboard) => {
   }
 
   return output
+}
+
+function compositionFinder(composition,patterns,count) {
+  if(patterns.length <= 0 || composition.length <= 0) {
+      output.push(count);
+      return;
+  }else{
+      for(let i = 0;i<patterns.length;++i){
+        const first = patterns[i][0];
+        const second = patterns[i][1];
+        if(composition.indexOf(first+second) != -1){ 
+            const regexp = new RegExp(first+second, "g");
+            const removals = (composition.match(regexp) || []).length;
+            compositionFinder(composition.replace(first, ""),[...patterns.slice(0,i),...patterns.slice(i+1)], count + removals);
+            compositionFinder(composition.replace(second, ""),[...patterns.slice(0,i),...patterns.slice(i+1)],count + removals);
+        }else{
+            compositionFinder(composition,patterns.slice(1,),count)
+            continue;
+        }
+      }
+  }
 }
 
 
