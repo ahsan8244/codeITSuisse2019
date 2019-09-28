@@ -10,8 +10,8 @@ router.get('/', (req, res) => {
 router.post('/chessgame', (req, res) => {
   const input = req.body;
   const board = input[Object.keys(input)[0]];
-  const result = 0;
-  res.send("hello");
+  const result = chessboard(board);
+  res.send({result});
 });
 
 router.post('/readyplayerone', (req, res) => {
