@@ -83,20 +83,22 @@ router.post('/generateSequence', (req, res) => {
           mainObj[modulesArr[i]]=[]
       }
   }
-  for(var i=0, len=depenPairs.length;i<len; i++){
-      dependee1=depenPairs[i]["dependee"];
-      dependent1=depenPairs[i]["dependentOn"];
-      mainObj[dependee1].push(dependent1);
-  }
+  if (main.length !== 0) {
+    for(var i=0, len=depenPairs.length;i<len; i++){
+        dependee1=depenPairs[i]["dependee"];
+        dependent1=depenPairs[i]["dependentOn"];
+        mainObj[dependee1].push(dependent1);
+    }
 
-  for (var x=0, len=Object.keys(mainObj).length; x<len; x++){
-      for(var i=0, len=Object.keys(mainObj).length; i<len; i++){
-          if (check(mainObj[Object.keys(mainObj)[i]], main)){
-              if(!(main.includes(Object.keys(mainObj)[i]))){
-                  main.push(Object.keys(mainObj)[i]);
-              }
-          }
-      }
+    for (var x=0, len=Object.keys(mainObj).length; x<len; x++){
+        for(var i=0, len=Object.keys(mainObj).length; i<len; i++){
+            if (check(mainObj[Object.keys(mainObj)[i]], main)){
+                if(!(main.includes(Object.keys(mainObj)[i]))){
+                    main.push(Object.keys(mainObj)[i]);
+                }
+            }
+        }
+    }
   }
 
   res.send(main);
