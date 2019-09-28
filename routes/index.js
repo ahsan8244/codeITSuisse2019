@@ -11,7 +11,7 @@ router.post('/chessgame', (req, res) => {
   const input = req.body;
   const board = input[Object.keys(input)[0]];
   const result = chessboard(board);
-  res.send({result});
+  res.json(result);
 });
 
 router.post('/readyplayerone', (req, res) => {
