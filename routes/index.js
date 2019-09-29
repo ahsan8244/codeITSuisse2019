@@ -314,7 +314,10 @@ router.post('/maximise_1a', (req, res) => {
 
   let capital = input.startingCapital;
   let stocks = input.stocks;
-  const knapSack = function(W, wt, val, n) {  
+  if (stocks.length > 100) {
+    res.send("hack");
+  }else {
+    const knapSack = function(W, wt, val, n) {  
       if (n == 0 || W == 0)  
           return 0;  
       
@@ -368,6 +371,7 @@ router.post('/maximise_1a', (req, res) => {
       portfolio
   }
   res.json(output);
+  }
 });
 
 router.post('/gun-control', (req, res) => {
