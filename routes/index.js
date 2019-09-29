@@ -9,6 +9,13 @@ router.get('/', (req, res) => {
   res.send('It works!');
 });
 
+router.post('/defuse', (req, res) => {
+  const input = req.body;
+  const num = getRandomInt(0, 11);
+  const answer = [num];
+  res.send(answer);
+});
+
 router.post('/yin-yang', (req, res) => {
   const input = req.body;
   res.send("1.0000000000");
