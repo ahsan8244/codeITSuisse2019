@@ -53,8 +53,11 @@ function maxSum(capital,n){
             for(let i = 0; i<numOfStocks ;++i){
                 portfolio.push(stocksSorted[n][0]);
             }
+            profit += (numOfStocks*(stocksSorted[n][1]));
+            stocksSortedCost.splice(n,1);
+            stocksSorted.splice(n,1);
+            minCost = Math.min(...stocksSortedCost);
         }
-        profit += (numOfStocks*(stocksSorted[n][1]));
         n-=1;
         capital-=cost;
     }
