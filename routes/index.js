@@ -129,7 +129,7 @@ let stocks = input.stocks;
 
 // let stocksSorted = quickSort(stocks,0,stocks.length - 1);
 let stocksSorted = stocks.sort(function(a,b){
-    return (a[2]/a[3])>(b[2]/b[3]);
+    return (a[1]/a[2])>(b[1]/b[2]);
 })
 let stocksSortedCost = stocksSorted;
 stocksSortedCost = stocksSortedCost.map(item => item[2]);
@@ -183,7 +183,7 @@ let stocks = input.stocks;
 
 
 let stocksSorted = stocks.sort(function(a,b){
-    return (a[2]/a[3])>(b[2]/b[3]);
+    return (a[1]/a[2])>(b[1]/b[2]);
 })
 let stocksSortedCost = stocksSorted.map(item => item[2]);
 let minCost = Math.min(...stocksSortedCost);
