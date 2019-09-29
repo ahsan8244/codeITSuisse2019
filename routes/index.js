@@ -102,17 +102,17 @@ router.post('/encryption', (req, res) => {
 
     let chars = text.split('');
 
-    //chars = ['T','O',...]
-    //TOOSHORT
-    let ind = 0;
-    let count = n;
-    for (j = 1; j < text.length; j++) {
-      ind = (ind + n);
-      ind = ind % text.length;
-      if(n % 2 === 0){
-        ind -= 1;
+    //chars = ['T','O'...]
+    let count = 0;
+    for (j = 0; j < text.length; j++) {
+      if (count >= text.length) {
+        count = count % chars.length;
+        if (n % 2 === 0) {
+          count -= 1;
+        }
       }
-      chars[ind] = text[j]; 
+      chars[count] = text[j];
+      count += n;
     }
     output.push(chars.join(''));
   }
