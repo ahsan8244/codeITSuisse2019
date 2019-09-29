@@ -157,7 +157,6 @@ function maxSum(capital,n){
             stocksSorted.splice(n,1);
             minCost = Math.min(...stocksSortedCost);
         }
-        profit += (numOfStocks*(stocksSorted[n][1]));
         n-=1;
         capital-=cost;
     }
