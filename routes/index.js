@@ -11,8 +11,10 @@ router.get('/', (req, res) => {
 
 router.post('/defuse', (req, res) => {
   const input = req.body;
-  const num = getRandomInt(0, 11);
-  const answer = [num];
+  let answer = [];
+  for (i = 0; i <= 6; i++) {
+    answer.push(getRandomInt(0, 11));
+  }
   res.send(answer);
 });
 
