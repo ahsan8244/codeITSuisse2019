@@ -9,6 +9,36 @@ router.get('/', (req, res) => {
   res.send('It works!');
 });
 
+router.post('/encryption', (req, res) => {
+  let input = req.body;
+
+  let output = [];
+
+  for (i = 0; i < input.length; i++) {
+    let testinput = input[i];
+    let n = testinput.n; 
+    let text = testinput.text.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
+    if(n > text.length) {
+      output.push(text);
+    }else {
+      let chars = text.split('');
+      let count = 0;
+      for (j = 0; j < text.length; j++) {
+        if (count >= text.length) {
+          count = count - chars.length;
+        }
+        chars[count] = text[j];
+        count += n;
+      }
+      output.push(chars.join(''));
+      }
+  }
+
+  console.log(output);
+  res.send(output);
+});
+
 router.post('/maximise_1b', (req, res) => {
   let input = req.body;
   let capital = input.startingCapital;
