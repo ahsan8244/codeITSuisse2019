@@ -1,10 +1,10 @@
 let input = {
-    "startingCapital": 405,
+    "startingCapital": 400,
     "stocks": [
         [
-            "Sony", 
-            0.5, 
-            5  
+            "Sony", //ticker of type string
+            30, //expected profit of type int
+            400  //share price of type int
         ],
         [
             "Dell",
@@ -22,44 +22,54 @@ let input = {
             100
         ]
     ]
-}
-let capital = input.startingCapital;
+};
+  let capital = input.startingCapital;
 let stocks = input.stocks;
-
-
-let stocksSorted = stocks.sort(function(a,b){
-    return (a[2]/a[3])>(b[2]/b[3]);
-})
-let stocksSortedCost = stocksSorted.map(item => item[2]);
-let minCost = Math.min(...stocksSortedCost);
-let profit = 0;
-let portfolio = [];
-function maxSum(capital,n){
-    while(capital >= minCost && n >= 0){
-        let numOfStocks = 0;
-        let cost = 0;
-        if(capital >= stocksSorted[n][2]){
-            numOfStocks = Math.floor(capital/stocksSorted[n][2]);
-            cost = (numOfStocks*(stocksSortedCost[n]));
-            for(let i = 0; i<numOfStocks ;++i){
-                portfolio.push(stocksSorted[n][0]);
+let value = stocks.map(item => item[1]);
+let cost = stocks.map(item => item[2]);
+function unboundedKnapsack(W, n, val, wt){
+    let dp = [];
+    for(let i = 0;i < W+1 ;++i){
+        dp.push(0)
+    } 
+  
+    let ans = 0
+  
+    for (let i = 0; i<W+1;++i){
+        for(let j = 0;j<n;++j){
+            if(wt[j] <= i){
+                dp[i] = Math.max(dp[i],dp[i - wt[j]] + val[j]);
             }
-            profit += (numOfStocks*(stocksSorted[n][1]));
-            stocksSortedCost.splice(n,1);
-            stocksSorted.splice(n,1);
-            minCost = Math.min(...stocksSortedCost);
         }
-        n-=1;
-        capital-=cost;
-    }
+    } 
+
+  
+    return dp[W] ;
 }
 
-maxSum(capital,stocksSorted.length - 1);
+const profit = unboundedKnapsack(capital,value.length,value,cost);
+let portfolio = [];
+const subsetSum = function(L, n, result, m){
+    
+    if(m == 0){
+      portfolio.push(result);
+      return;
+    }
+    
+    if(n == 0){
+      return;
+    }
+  
+    if(L[n-1][2] <= m){
+      subsetSum(L,n-1,[...result,L[n-1][0]],m-L[n-1][2]);
+    }
+  
+    subsetSum(L,n-1,result,m);
+  
+  }
+//   portfolio = portfolio[0]
 let output = {
     profit,
     portfolio
-}
-console.log(output);
-
-
-
+};
+console.log(output)

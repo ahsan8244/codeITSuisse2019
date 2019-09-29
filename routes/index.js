@@ -135,7 +135,6 @@ let stocksSorted = stocks.sort(function(a,b){
 })
 let stocksSortedCost = stocksSorted;
 stocksSortedCost = stocksSortedCost.map(item => item[2]);
-let minCost = Math.min(...stocksSortedCost);
 let profit = 0;
 let portfolio = [];
 for(let i = 0 ; i<stocksSortedCost.length ; ++i){
@@ -144,27 +143,28 @@ for(let i = 0 ; i<stocksSortedCost.length ; ++i){
     capital -= stocksSorted[i][2];
 }
 
-function maxSum(capital,n){
-    while(capital >= minCost && n >= 0){
-        let numOfStocks = 0;
-        let cost = 0;
-        if(capital >= stocksSorted[n][2]){
-            numOfStocks = Math.floor(capital/stocksSorted[n][2]);
-            cost = (numOfStocks*(stocksSortedCost[n]));
-            for(let i = 0; i<numOfStocks ;++i){
-                portfolio.push(stocksSorted[n][0]);
+function unboundedKnapsack(W, n, val, wt){
+    let dp = [];
+    for(let i = 0;i < W+1 ;++i){
+        dp.push(0)
+    } 
+  
+    let ans = 0
+  
+    for (let i = 0; i<W+1;++i){
+        for(let j = 0;j<n;++j){
+            if(wt[j] <= i){
+                dp[i] = Math.max(dp[i],dp[i - wt[j]] + val[j]);
             }
-            profit += (numOfStocks*(stocksSorted[n][1]));
-            let arr = stocksSortedCost.slice(0,stocksSortedCost.length - 1);
-            minCost = Math.min(...arr);
         }
-        n-=1;
-        capital-=cost;
-    }
+    } 
+
+  
+    return dp[W] ;
 }
 
+profit += unboundedKnapsack(capital,value.length,value,cost);
 
-maxSum(capital,stocksSorted.length - 1);
 let output = {
     profit,
     portfolio
@@ -181,40 +181,38 @@ router.post('/maximise_1c', (req, res) => {
   let input = req.body;
   let capital = input.startingCapital;
 let stocks = input.stocks;
-
-
-let stocksSorted = stocks.sort(function(a,b){
-    return (a[1]/a[2])>(b[1]/b[2]);
-})
-let stocksSortedCost = stocksSorted.map(item => item[2]);
-let minCost = Math.min(...stocksSortedCost);
-let profit = 0;
-let portfolio = [];
-function maxSum(capital,n){
-    while(capital >= minCost && n >= 0){
-        let numOfStocks = 0;
-        let cost = 0;
-        if(capital >= stocksSorted[n][2]){
-            numOfStocks = Math.floor(capital/stocksSorted[n][2]);
-            cost = (numOfStocks*(stocksSortedCost[n]));
-            for(let i = 0; i<numOfStocks ;++i){
-                portfolio.push(stocksSorted[n][0]);
+let value = stocks.map(item => item[1]);
+let cost = stocks.map(item => item[2]);
+function unboundedKnapsack(W, n, val, wt){
+    let dp = [];
+    for(let i = 0;i < W+1 ;++i){
+        dp.push(0)
+    } 
+  
+    let ans = 0
+  
+    for (let i = 0; i<W+1;++i){
+        for(let j = 0;j<n;++j){
+            if(wt[j] <= i){
+                dp[i] = Math.max(dp[i],dp[i - wt[j]] + val[j]);
             }
-            profit += (numOfStocks*(stocksSorted[n][1]));
-            let arr = stocksSortedCost.slice(0,stocksSortedCost.length - 1);
-            minCost = Math.min(...arr);
         }
-        n-=1;
-        capital-=cost;
-    }
+    } 
+
+  
+    return dp[W] ;
 }
 
-maxSum(capital,stocksSorted.length - 1);
+const profit = unboundedKnapsack(capital,value.length,value,cost);
+let portfolio = [];
+
 let output = {
     profit,
     portfolio
-}
-  res.json(output);
+};
+
+res.json(output);
+
 });
 
 router.post('/maximise_1a', (req, res) => {
