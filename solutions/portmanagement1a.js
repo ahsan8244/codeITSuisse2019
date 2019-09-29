@@ -53,6 +53,9 @@ let output = {
 };
 let solution = [];
 const subsetSum = function(L, n, result, m){
+if(solution.length != 0){
+    return;
+}
 if(m == 0){
     solution.push(result);
     return;
