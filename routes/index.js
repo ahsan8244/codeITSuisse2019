@@ -100,21 +100,22 @@ router.post('/encryption', (req, res) => {
 
     //text = TOOSHORT
 
-    let chars = text.split('');
+    if(n >= text.length) {
+      output.push(text);
+    }else {
+      let chars = text.split('');
 
-    //chars = ['T','O'...]
-    let count = 0;
-    for (j = 0; j < text.length; j++) {
-      if (count >= text.length) {
-        count = count % chars.length;
-        if (n % 2 === 0) {
-          count -= 1;
+      //chars = ['T','O'...]
+      let count = 0;
+      for (j = 0; j < text.length; j++) {
+        if (count >= text.length) {
+          count = count % chars.length;
         }
+        chars[count] = text[j];
+        count += n;
       }
-      chars[count] = text[j];
-      count += n;
-    }
-    output.push(chars.join(''));
+      output.push(chars.join(''));
+      }
   }
 
   console.log(output);
