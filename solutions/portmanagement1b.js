@@ -60,6 +60,8 @@ function partition(items, left, right) {
     return i;
 }
 
+
+
 function quickSort(items, left, right) {
 
     let index;
@@ -81,7 +83,10 @@ function quickSort(items, left, right) {
     return items;
 }
 
-let stocksSorted = quickSort(stocks,0,stocks.length - 1);
+// let stocksSorted = quickSort(stocks,0,stocks.length - 1);
+let stocksSorted = stocks.sort(function(a,b){
+    return (a[2]/a[3])>(b[2]/b[3]);
+})
 let stocksSortedCost = stocksSorted;
 stocksSortedCost = stocksSortedCost.map(item => item[2]);
 let minCost = Math.min(...stocksSortedCost);
@@ -93,25 +98,25 @@ for(let i = 0 ; i<stocksSortedCost.length ; ++i){
     capital -= stocksSorted[i][2];
 }
 
-
-
-function maxSum(stocksSorted,capital,n){
-    if(capital < minCost || n < 0){
-        return;
-    }else if(capital >= stocksSortedCost[n]){
-        let numOfStocks = Math.floor(capital/stocksSortedCost[n]);
-        profit += (numOfStocks*stocksSorted[n][1]);
-        let stock = stocksSorted[n][0]
-        for(let i = 0;i<numOfStocks; ++i){
-            portfolio.push(stock);
+function maxSum(capital,n){
+    while(capital >= minCost && n >= 0){
+        let numOfStocks = 0;
+        let cost = 0;
+        if(capital >= stocksSorted[n][2]){
+            numOfStocks = Math.floor(capital/stocksSorted[n][2]);
+            cost = (numOfStocks*(stocksSortedCost[n]));
+            for(let i = 0; i<numOfStocks ;++i){
+                portfolio.push(stocksSorted[n][0]);
+            }
         }
-        maxSum(stocksSorted,capital-(numOfStocks*stocksSortedCost[n]),n-1);
-    }else{
-        maxSum(stocksSorted,capital,n-1);
+        profit += (numOfStocks*(stocksSorted[n][1]));
+        n-=1;
+        capital-=cost;
     }
 }
 
-maxSum(stocksSorted,capital,stocksSorted.length - 1);
+
+maxSum(capital,stocksSorted.length - 1);
 let output = {
     profit,
     portfolio
