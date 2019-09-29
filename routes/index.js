@@ -213,7 +213,7 @@ router.post('/maximise_1a', (req, res) => {
 
   function lastMove(myCosts, myMoney){
       array=[...myCosts]
-      couldBe=[]
+      couldBe=[];
       numNegatives=0;
       for(var i=0; i<array.length; i++){
           array[i]-=myMoney;
@@ -226,10 +226,8 @@ router.post('/maximise_1a', (req, res) => {
       if(numNegatives>2){
           return false;
       }else{;
-          return Math.max(...couldBe);
+          return couldBe;
       }
-
-
   }
 
   money=input["startingCapital"]
@@ -275,9 +273,15 @@ router.post('/maximise_1a', (req, res) => {
           for(var i=0; i<stocks.length; i++){
               if(remainingMoney>=stocks[i][2] && stocks[i][4]){
                   if(lastMove(costs, remainingMoney)){
-                      lastOne=lastMove(costs, remainingMoney);
+                      lastOnes=lastMove(costs, remainingMoney);
                       for(var x=0; x<stocks.length; x++){
-                          if(lastOne===stocks[x][2]){
+                          for(var m=0; m<lastOnes.length; m++){
+                              if(lastOnes[m]===stocks[x][2]){
+                                  lastOnes[m]=stocks[x][1];
+                              }
+                          }
+                          lastOne=Math.max(...lastOnes)
+                          if(lastOne===stocks[x][1]){
                               currentRoute.push(stocks[x][1])
                               profit+=stocks[x][1];
                               portfolio.push(stocks[x][0])
