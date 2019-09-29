@@ -123,6 +123,7 @@ router.post('/encryption', (req, res) => {
 });
 
 router.post('/maximise_1b', (req, res) => {
+  console.log(req.body);
   let input = req.body;
   let capital = input.startingCapital;
 let stocks = input.stocks;
