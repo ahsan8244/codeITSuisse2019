@@ -13,7 +13,7 @@ router.post('/defuse', (req, res) => {
   const input = req.body;
   let answer = [];
   for (i = 0; i < 6; i++) {
-    answer.push(getRandomInt(0, 11));
+    answer.push(0);
   }
   res.send(answer);
 });
