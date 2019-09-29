@@ -20,7 +20,8 @@ let input = {
             "Apple",
             20,
             100
-        ]
+        ],
+        
     ]
 }
 let capital = input.startingCapital;

@@ -35,19 +35,6 @@ let minCost = Math.min(...stocksSortedCost);
 let profit = 0;
 let portfolio = [];
 function maxSum(capital,n){
-    // if(capital < minCost){
-    //     return;
-    // }else if(capital >= stocksSorted[n][2]){
-    //     let numOfStocks = Math.floor(capital/stocksSortedCost[n]);
-    //     profit += (numOfStocks*stocksSorted[n][1]);
-    //     let stock = stocksSorted[n][0]
-    //     for(let i = 0;i<numOfStocks; ++i){
-    //         portfolio.push(stock);
-    //     }
-    //     maxSum(capital-(numOfStocks*stocksSorted[n][2]),n-1);
-    // }else{
-    //     maxSum(capital,n-1);
-    // }
     while(capital >= minCost && n >= 0){
         let numOfStocks = 0;
         let cost = 0;
