@@ -91,35 +91,44 @@ router.post('/typing-contest', (req, res) => {
 router.post('/encryption', (req, res) => {
   let input = req.body;
 
-  let output = [];
 
-  for (i = 0; i < input.length; i++) {
-    let testinput = input[i];
-    let n = testinput.n; 
-    let text = testinput.text.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+  result=[]
+  route=input.length
 
-    //text = TOOSHORT
+  alphabets= ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ").split("")
+  numbers=("0123456789").split("")
 
-    if(n >= text.length) {
-      output.push(text);
-    }else {
-      let chars = text.split('');
-
-      //chars = ['T','O'...]
-      let count = 0;
-      for (j = 0; j < text.length; j++) {
-        if (count >= text.length) {
-          count = count % chars.length;
-        }
-        chars[count] = text[j];
-        count += n;
+  for(var r=0; r<route; r++){
+      key=input[r]["n"]
+      text=input[r]["text"]
+      res=text.split(" ")
+      sentence=""
+      for(var i=0; i<res.length; i++){
+          sentence+=res[i];
       }
-      output.push(chars.join(''));
+      finalSentence=sentence.replace(/[^a-zA-Z0-9]/g,'').toUpperCase();
+      sum=0;
+      cipheredSentence=[]
+      for(var i=0; i<finalSentence.length; i++){
+          cipheredSentence.push("0");
       }
+      m=0
+      for (var x=0;x<finalSentence.length; x++){
+          for(var y=x; y<finalSentence.length; y+=key){
+              if(cipheredSentence[y]==="0"){
+                  cipheredSentence[y]=finalSentence[m];
+                  m++;
+              }
+          }
+      }
+      finalAnswer="";
+      for(var x=0; x<cipheredSentence.length; x++){
+          finalAnswer+=cipheredSentence[x];
+      }
+      result.push(finalAnswer);
   }
-
-  console.log(output);
-  res.send(output);
+  console.log(result);
+  res.send(result);
 });
 
 router.post('/maximise_1b', (req, res) => {
