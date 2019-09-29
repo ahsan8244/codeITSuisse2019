@@ -157,6 +157,9 @@ router.post('/maximise_1b', (req, res) => {
   let capital = input.startingCapital;
 let stocks = input.stocks;
 
+let value = stocks.map(item => item[1]);
+let cost = stocks.map(item => item[2]);
+
 
 // let stocksSorted = quickSort(stocks,0,stocks.length - 1);
 let stocksSorted = stocks.sort(function(a,b){
