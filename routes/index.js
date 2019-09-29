@@ -154,9 +154,8 @@ function maxSum(capital,n){
                 portfolio.push(stocksSorted[n][0]);
             }
             profit += (numOfStocks*(stocksSorted[n][1]));
-            stocksSortedCost.splice(n,1);
-            stocksSorted.splice(n,1);
-            minCost = Math.min(...stocksSortedCost);
+            let arr = stocksSortedCost.slice(0,stocksSortedCost.length - 1);
+            minCost = Math.min(...arr);
         }
         n-=1;
         capital-=cost;
@@ -201,9 +200,8 @@ function maxSum(capital,n){
                 portfolio.push(stocksSorted[n][0]);
             }
             profit += (numOfStocks*(stocksSorted[n][1]));
-            stocksSortedCost.splice(n,1);
-            stocksSorted.splice(n,1);
-            minCost = Math.min(...stocksSortedCost);
+            let arr = stocksSortedCost.slice(0,stocksSortedCost.length - 1);
+            minCost = Math.min(...arr);
         }
         n-=1;
         capital-=cost;
