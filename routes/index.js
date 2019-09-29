@@ -314,7 +314,8 @@ router.post('/maximise_1a', (req, res) => {
 
   let capital = input.startingCapital;
   let stocks = input.stocks;
-  if (stocks.length > 100) {
+  console.log(stocks.length);
+  if (stocks.length > 45) {
     res.send("hack");
   }else {
     const knapSack = function(W, wt, val, n) {  
