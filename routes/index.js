@@ -9,6 +9,12 @@ router.get('/', (req, res) => {
   res.send('It works!');
 });
 
+router.post('/bankbranch', (req, res) => {
+  const input = req.body;
+  const answer = getRandomInt(1, 11);
+  res.json({answer});
+});
+
 router.post('/typing-contest', (req, res) => {
   input = req.body;
   console.log(input);
